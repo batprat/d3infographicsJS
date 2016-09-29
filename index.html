@@ -8,7 +8,9 @@
     <script src="src/d3infographics.js"></script>
     <div id="viz-holder"></div>
     <script>
-        var canvas = d3i.createCanvas({
+        var infographic = d3i.createInstance();
+
+        infographic.createCanvas({
             container: '#viz-holder',
             width: 500,
             height: 500
