@@ -4,6 +4,19 @@
     <title>Demo page</title>
 </head>
 <body>
+    <script src="libs/d3/d3.min.js"></script>
+    <script src="src/d3infographics.js"></script>
+    <div id="viz-holder"></div>
+    <script>
+        var infographic = d3i.createInstance();
 
+        infographic.createCanvas({
+            container: '#viz-holder',
+            width: 500,
+            height: 500
+        });
+
+
+    </script>
 </body>
 </html>
