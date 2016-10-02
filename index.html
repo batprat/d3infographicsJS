@@ -15,22 +15,24 @@
             width: 500,
             height: 500
         }).addBackground({
-            color: '#4CAF50'
-        }).addBackground({
+            color: {
+                value: 'rgb(76,175,80)',
+                opacity: 1
+            },
             pattern: {
                 url: 'http://www.w3schools.com/tags/img_lamp.jpg',
                 repeat: true,
                 x: 50,
                 y: 50,
                 width: 400,
-                height: 400
-            }
-        })
-        .addBackground({
+                height: 400,
+                opacity: 0.5
+            },
             image: {
                 url: 'http://www.w3schools.com/tags/img_the_scream.jpg',
                 x: 80,
-                y: 80
+                y: 80,
+                opacity: 0.7
             }
         }).render();
 
