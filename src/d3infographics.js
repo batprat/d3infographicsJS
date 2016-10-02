@@ -167,12 +167,37 @@
 
         if (options.image.url) {
             enqueue(function () {
-                setBackgroundImage(this.context, options, this.queue);
+                setImage(this.context, options, this.queue);
             }, this.queue);
         }
 
         return this;
     };
+
+    /*
+        Method to add image.
+        param: options | Object
+        example: infographic.addImage({
+            url: '',
+            x: 0,
+            y: 0,
+            width: 300,
+            height: 300
+        })
+    */
+    d3i.prototype.addImage = function (options) {
+        options = options || {};
+
+        if (!options.url) {
+            throw new Error('addImage method requires url of image to be added');
+        }
+
+        enqueue(function () {
+            setImage(this.context, options, this.queue, true);
+        }, this.queue);
+
+        return this;
+    }
 
     /*Method to render all the queued drawings*/
     d3i.prototype.render = function () {
@@ -243,26 +268,35 @@
         image.src = background.pattern.url;
     }
 
-    function setBackgroundImage(context, background, queue) {
-        // TODO: validate if background.image.url is a valid image URL.
+    function setImage(context, options, queue, foreground) {
+        // TODO: validate if options.image.url is a valid image URL.
+        // TODO: Add support for x and y values to be negative. (calculate from right border)
         var image = document.createElement('IMG');
         var clipWidth, clipHeight, width, height;
         queue.paused = true;
         image.onload = function () {
-            clipWidth = background.image.clipWidth ? background.image.clipWidth : image.width;
-            clipHeight = background.image.clipHeight ? background.image.clipHeight : image.height;
-            width = background.image.width ? background.image.width : image.width;
-            height = background.image.height ? background.image.height : image.height;
-
-            // TODO: Add support for x and y values to be negative. (calculate from right border)
             context.save();
-            context.globalAlpha = background.image.opacity;
-            context.drawImage(image, background.image.clipX, background.image.clipY, clipWidth, clipHeight, background.image.x, background.image.y, width, height);
+            if (foreground) {
+                // no clipping
+                width = options.width || image.width;
+                height = options.height || image.height;
+
+                context.drawImage(image, options.x, options.y, width, height);
+            }
+            else {
+                clipWidth = options.image.clipWidth ? options.image.clipWidth : image.width;
+                clipHeight = options.image.clipHeight ? options.image.clipHeight : image.height;
+                width = options.image.width ? options.image.width : image.width;
+                height = options.image.height ? options.image.height : image.height;
+
+                context.globalAlpha = options.image.opacity;
+                context.drawImage(image, options.image.clipX, options.image.clipY, clipWidth, clipHeight, options.image.x, options.image.y, width, height);
+            }
             context.restore();
             return queue.resume();
         };
 
-        image.src = background.image.url;
+        image.src = foreground ? options.url : options.image.url;
     }
 
     // Helpers
