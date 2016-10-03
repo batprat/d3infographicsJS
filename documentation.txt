@@ -1,0 +1,92 @@
+﻿Usage:
+
+Example:
+var infographic = new d3i();
+
+infographic.createCanvas({
+            container: '#viz-holder',
+            width: 500,
+            height: 500
+        }).addBackground({
+            color: {
+                value: 'rgb(76,175,80)',
+                opacity: 1
+            },
+            pattern: {
+                url: 'http://www.w3schools.com/tags/img_lamp.jpg',
+                repeat: true,
+                x: 50,
+                y: 50,
+                width: 400,
+                height: 400,
+                opacity: 0.5
+            },
+            image: {
+                url: 'http://www.w3schools.com/tags/img_the_scream.jpg',
+                x: 80,
+                y: 80,
+                opacity: 0.7
+            }
+        })
+        .addImage({
+            url: 'http://batman-news.com/wp-content/uploads/2014/01/logo-snb.png',
+            x: 100,
+            y: 100
+        }).render();
+
+
+new d3i()  - returns a d3i object which can be used to create canvas and draw over it.
+
+createCanvas - method to create canvas.
+    param - options | Object
+        container | String | `body` - selector in which canvas will be created.
+        width | Number | 400 - width of the canvas / infographic
+        height | Height | 300 - height of the canvas / infographic
+    returns - object of type d3i for chaining.
+
+setContext - method to set context. Can be used in case one wishes to use their own canvas instead of creating a canvas using createCanvas.
+Useful when drawing on an already created canvas.
+    param - canvas context | Context Object | Required
+    returns - object of type d3i for chaining.
+
+addBackground - method to add background.
+    param - options | Object
+        color | Object
+            value | String | Required
+            x | Number | 0
+            y | Number | 0
+            width | Number | 0
+            height | Number | 0
+            opacity | Number | 1
+        pattern | Object
+            url | String | false - URL of the image to be used as a repeating pattern
+            repeat | String/Boolean | true
+                'x' : Horizontally repeating pattern
+                'y' : Vertically repeating pattern
+                'repeat' / true : Horizontally and Vertically pattern
+                'no-repeat' / false : Non repeating pattern
+            x | Number | 0
+            y | Number | 0
+            width | Number | width of the canvas
+            height | Number | height of the canvas
+            opacity | Number | 1
+        image | Object
+            url | String | false
+            x | Number | 0
+            y | Number | 0
+            width | Number | width of the image
+            height | Number | height of the image
+            opacity | Number | 1
+    returns - object of type d3i for chaining.
+
+addImage - method to add an image
+    param - options | Object
+        url | String | false - URL of the image to be added
+        x | Number | 0
+        y | Number | 0
+        width | Number | width of the image
+        height | Number | height of the image
+    returns - object of type d3i for chaining.
+
+render - method to render the infographic
+returns - object of type d3i for chaining.
