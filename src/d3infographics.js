@@ -61,6 +61,18 @@
             x: 0,
             y: 0
         };
+
+        this.defaults.text = {
+            text: false,
+            font: 'sans-serif',
+            style: '',          // `bold`, `italic`, `bold italic`
+            size: 12,
+            align: 'start',          // start|end|left|center|right
+            x: 0,
+            y: 0,
+            color: 'rgba(0, 0, 0, 1)',
+            opacity: 1
+        };
     };
 
     /*
@@ -208,6 +220,35 @@
         return this;
     };
 
+    /*
+        This function adds text to the infographic
+        example: infographic.addText({
+            text: 'Praty Rocks!',
+            size: 20,
+            style: 'bold',      // `bold`, `italic`, `bold italic`
+            x: 0,
+            y: 250,
+            color: 'rgb(255,25,25)',
+            font: 'Courier',
+            opacity: 0.7,
+            align: 'center'     // start|end|left|center|right
+        });
+    */
+    d3i.prototype.addText = function (options) {
+        checkCanvas(this.canvas, this.context);
+
+        options = _extend({}, this.defaults.text, options);
+
+        if (!options.text) {
+            throw new Error('Text needs to be present in order to use addText');
+        }
+
+        enqueue(function () {
+            setText(this.context, options);
+        }, this.queue);
+        return this;
+    };
+
     /*Method to render all the queued drawings*/
     d3i.prototype.render = function () {
         while (this.queue.length) {
@@ -217,9 +258,11 @@
             // remove this function from the queue.
             this.queue.splice(0, 1);
             if (this.queue.paused) {
-                return;
+                return this;
             }
         }
+
+        return this;
     };
 
     return d3i;
@@ -308,6 +351,17 @@
         image.src = foreground ? options.url : options.image.url;
     }
 
+    function setText(context, options, queue) {
+        context.save();
+
+        context.font = (options.style ? (options.style + ' ') : '') + options.size.toString() + 'pt ' + options.font;
+        context.fillStyle = _convertToRgba(options.color, options.opacity);
+        context.textAlign = options.align;
+        context.globalAlpha = options.opacity;
+        context.fillText(options.text, options.x, options.y);
+
+        context.restore();
+    }
     // Helpers
     function _extend() {
         var dest = arguments[0] || {};
