@@ -56,6 +56,11 @@
                 repeat: false
             }
         };
+
+        this.defaults.image = {
+            x: 0,
+            y: 0
+        };
     };
 
     /*
@@ -186,7 +191,11 @@
         })
     */
     d3i.prototype.addImage = function (options) {
-        options = options || {};
+        if (!this.canvas || !this.context) {
+            throw new Error('You need to first create canvas or set context');
+        }
+
+        options = _extend({}, this.defaults.image, options);
 
         if (!options.url) {
             throw new Error('addImage method requires url of image to be added');
@@ -197,7 +206,7 @@
         }, this.queue);
 
         return this;
-    }
+    };
 
     /*Method to render all the queued drawings*/
     d3i.prototype.render = function () {
