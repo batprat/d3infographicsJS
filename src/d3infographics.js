@@ -109,6 +109,9 @@
         param: context
     */
     d3i.prototype.setContext = function (context) {
+        if (!context) {
+            throw new Error('Context must be specified while using setContext');
+        }
         this.context = context;
 
         return this;
@@ -149,9 +152,7 @@
     d3i.prototype.addBackground = function (options) {
         // TODO: add support for adding background video.
         // TODO: add support for detecting { color: 'string' } and setting the entire bg color. Same with { image: 'url' } and { pattern: 'url' }
-        if (!this.canvas || !this.context) {
-            throw new Error('You need to first create canvas or set context');
-        }
+        checkCanvas(this.canvas, this.context);
         options = _extend({}, this.defaults.background, {
             width: this.width, height: this.height,
             pattern: { width: this.width, height: this.height },
@@ -191,9 +192,8 @@
         })
     */
     d3i.prototype.addImage = function (options) {
-        if (!this.canvas || !this.context) {
-            throw new Error('You need to first create canvas or set context');
-        }
+        // TODO: Add code to add border to the image
+        checkCanvas(this.canvas, this.context);
 
         options = _extend({}, this.defaults.image, options);
 
@@ -368,6 +368,12 @@
         else {
             // can be something like 'lightgray'
             return color;
+        }
+    }
+
+    function checkCanvas(canvas, context) {
+        if (!canvas || !context) {
+            throw new Error('You need to first create canvas or set context');
         }
     }
 })();
