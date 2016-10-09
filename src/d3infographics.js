@@ -340,8 +340,7 @@
         if (color.indexOf('rgba') === 0) {
             return color;
         }
-
-        if (color.indexOf('rgb') === 0) {
+        else if (color.indexOf('rgb') === 0) {
             color = color.split('(');
             color[0] = color[0] + 'a';
             color = color.join('(');
@@ -354,8 +353,7 @@
 
             return color;
         }
-
-        if (color.indexOf('#') === 0) {
+        else if (color.indexOf('#') === 0) {
             // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
             var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
             hex = hex.replace(shorthandRegex, function (m, r, g, b) {
@@ -368,7 +366,8 @@
                 : 'rgba(255, 255, 255, ' + opacity + ')';
         }
         else {
-            throw new Error('color ' + color + ' not reccognized. Please make sure it is in the correct format. (e.g. `#fff`, `#ffffff`, `rgb(256, 256, 256)` or rgba(256, 256, 256, 0.5))');
+            // can be something like 'lightgray'
+            return color;
         }
     }
 })();
