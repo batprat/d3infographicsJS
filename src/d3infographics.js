@@ -59,7 +59,9 @@
 
         this.defaults.image = {
             x: 0,
-            y: 0
+            y: 0,
+            url: false,
+            border: false
         };
 
         this.defaults.text = {
@@ -200,7 +202,11 @@
             x: 0,
             y: 0,
             width: 300,
-            height: 300
+            height: 300,
+            border: {
+                width: 10,
+                color: '#000000'
+            }
         })
     */
     d3i.prototype.addImage = function (options) {
@@ -324,14 +330,25 @@
         // TODO: validate if options.image.url is a valid image URL.
         // TODO: Add support for x and y values to be negative. (calculate from right border)
         var image = document.createElement('IMG');
-        var clipWidth, clipHeight, width, height;
+        
         queue.paused = true;
         image.onload = function () {
+            var clipWidth, clipHeight, width, height;
             context.save();
             if (foreground) {
                 // no clipping
                 width = options.width || image.width;
                 height = options.height || image.height;
+
+                if (options.border) {
+                    context.save();
+                    context.beginPath();
+                    context.lineWidth = options.border.width;
+                    context.strokeStyle = options.border.color;
+                    context.rect(options.x - options.border.width / 2, options.y - options.border.width / 2, width + options.border.width, height + options.border.width);
+                    context.stroke();
+                    context.restore();
+                }
 
                 context.drawImage(image, options.x, options.y, width, height);
             }
